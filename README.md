@@ -39,7 +39,13 @@ Coming soon
 
 ## AI Use Disclosure
 
-Coming soon
+## AI Use Disclosure
+
+- **Tools used:** Google Gemini (`gemini-3.8-flash` via the `google.genai` API in Colab) and AI assistance for drafting/debugging code and documentation.
+- **What I asked:** Help organizing pandas missing-category checks into a class, connecting to the Gemini API and Frankfurter currency API using Colab Secrets (`GOOGLE_API_KEY`), and fixing rate-limit/empty-country errors.
+- **What I changed:** Switched the model name to `gemini-3.8-flash`, added a zero-row check in `missing_rate`, lowered the live demo sample to 5 rows with `time.sleep(4)`, and adjusted prompts and category labels to 16 standardized sectors.
+- **What I wrote / verified myself:** Dataset loading from Google Drive, `unknown_by_country`, the sub-questions and country targets, `JobPostingAnalyzer` methods, and running/verifying every cell top-to-bottom on `dfall_clean.csv`.
+- **Line-by-line understanding:** Yes — every cell uses MIST 4600 course Python (`for`, `if`, functions, `class`, `pandas`, `requests`, `google.genai`), and I can explain every line without AI.
 
 ## Author
 
