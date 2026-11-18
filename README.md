@@ -30,8 +30,6 @@ Dataset link: Coming soon
 - Google Gemini AI for job classification
 
 ## How to run it
-
-## How to run it
 1. **Get the data:** Use `dfall_clean.csv` (4,000 international Adzuna job postings from Kaggle's Global Job Market & Salary dataset, or the included 20-row `sample_rows__3__629d0f3b (2).csv` test file in this repository).
 2. **Put the data in Google Drive:** Upload `dfall_clean.csv` to your Google Drive (for example, inside `MyDrive/MIST 4600/`). Cell 1 mounts Google Drive (`drive.mount("/content/drive")`) and automatically finds and loads the CSV.
 3. **Open the notebook:** Open `Global_Job_Category_Imputation_Labor_Market_Intelligence.ipynb` in Google Colab.
@@ -78,12 +76,6 @@ United Kingdom     39405.110
 1. Biggest blind spot: Germany at 86.8% missing categories.
 2. Priority markets (15%+ unlabeled): Germany (86.8%), Switzerland (71.0%), France (65.0%), Spain (64.6%), Netherlands (56.2%), Italy (31.8%)
 3. Action: Use Gemini auto-classification on unlabeled titles before running search ads and recruiter packages.
-
-## Example output
-
-Coming soon
-
-## AI Use Disclosure
 
 ## AI Use Disclosure
 
