@@ -85,6 +85,22 @@ United Kingdom     39405.110
 - **What I wrote / verified myself:** Dataset loading from Google Drive, `unknown_by_country`, the sub-questions and country targets, `JobPostingAnalyzer` methods, and running/verifying every cell top-to-bottom on `dfall_clean.csv`.
 - **Line-by-line understanding:** Yes — every cell uses MIST 4600 course Python (`for`, `if`, functions, `class`, `pandas`, `requests`, `google.genai`), and I can explain every line without AI.
 
+## Live Web App — Project Stretch Goal
+
+[Open the live Streamlit app](https://global-job-category-imputation-labor-market-intelligence-gcul5.streamlit.app/)
+
+This project is deployed as a working web app on the free Streamlit Community Cloud. Users can explore 4,000 job postings across eight countries, view missing-category statistics, classify job titles using Gemini AI, and ask questions about the results.
+
+The app includes:
+- Country filters and missing-category tables.
+- AI classification of job titles in batches of 20.
+- Comparisons of job categories before and after classification.
+- A chatbot that answers questions using the calculated results.
+
+To try it, select a country to explore its data, then click **Classify pending jobs** to process job titles. Open **Ask the data** to ask a question about the results.
+
+The app runs from `app.py`, loads `dfall_clean.csv` directly from this repository, and uses `requirements.txt` to install its dependencies.
+
 ## Author
 
 Levi Michael Press
