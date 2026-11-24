@@ -1,97 +1,73 @@
 # Global Job Category Imputation and Labor Market Intelligence
 
-My app helps **job boards** decide **where to repair missing job categories and which sector campaigns to test** by labeling job titles and comparing sectors across eight countries.
-
-> MIST 4600 Honors Option · University of Georgia · Fall 2026
+My app helps **job boards** decide **where to repair missing job categories and which sector campaigns to test** by comparing job postings across eight countries.
 
 ## Problem
 
-Job boards cannot reliably sort or market postings when their category is missing. In this dataset, **1,879 of 4,000 postings (47.0%)** have an original tag of unknown or other-general-jobs. Each country has 500 sampled postings, so these results describe this dataset, not the size of a country's labor market.
+In the included 4,000-posting sample, 1,879 original job categories (47.0%) are `unknown` or `other-general-jobs`. That makes the postings harder to organize. Each country contributes 500 postings, so these counts describe this sample, not the size of a country's labor market.
 
 ## What it does
 
-The notebook answers three connected questions with pandas:
+Open [unknown_jobs.ipynb](unknown_jobs.ipynb) in Colab. The notebook answers three questions with pandas, one function per question:
 
-1. **Audit:** How many postings have missing categories in each country? This identifies where category repair matters most.
-2. **LLM check:** How often does Gemini's title-based sector label agree with an existing mapped sector? Which sectors does it find among originally missing rows? Agreement with an existing tag is a check, not proof that either label is correct.
-3. **Shifts and action (my own idea):** How do sector counts change after filling missing labels? The app recommends repairing categories first in the country with the highest original missing share, then testing sector-specific recruiter and advertising campaigns.
+1. **Q1 · Audit:** Which countries have the most missing categories? `question_1` counts the original missing tags and calculates a percentage for each country.
+2. **Q2 · LLM check:** How often did Gemini labels match existing sectors, and what types were hidden in missing categories? `question_2` displays the earlier completed Gemini run's aggregate results with pandas. `JobChatbot.label_one()` also calls Gemini on one originally missing title to show a live example of the same classification task.
+3. **Q3 · Shifts (my own idea):** How did the top sectors in each country change after filling missing categories? `question_3` displays before, after, and change with pandas.
 
-Gemini turns the free-text job title into the new ai_type column. That column is used in questions 2 and 3. Existing known sectors stay unchanged in the before/after comparison. The class JobChatbot holds the jobs, classifies titles in batches, and answers questions using the calculated tables.
-
-**Comparison rule:** The CSV has 2,121 rows with a nonmissing category. Of these, **2,093** map to the 16 chosen job sectors. The other 28 have part-time, graduate, or charity/voluntary tags. They are shown as outside taxonomy and excluded from exact sector agreement. The agreement denominator counts only those of the 2,093 that Gemini actually labeled with a sector; uncertain labels are excluded and should be reported separately.
-
-## Data and tools
-
-- dfall_clean.csv is included in this repository: 4,000 Adzuna job postings, 500 each from France, Germany, Italy, the Netherlands, Spain, Switzerland, the United Kingdom, and the USA. The job title is the unstructured input.
-- Python and pandas in Google Colab calculate all counts, percentages, and comparisons.
-- Google Gemini is the outside API that reads multilingual titles and supplies the ai_type sector label. The notebook uses the google-genai library and model gemini-3.5-flash-lite.
-- completed_results.csv contains only aggregate Q2 and Q3 counts from the completed run, with no individual titles or source IDs. A fresh Colab run uses it to display the full findings while new Gemini batches are pending.
-- app.py is the optional Streamlit interface.
+The notebook includes the full original [dfall_clean.csv](dfall_clean.csv) and the public, title-free [completed_results.csv](completed_results.csv). The aggregate file was calculated from an earlier Gemini classification of all 4,000 titles; **Q2 and Q3 use those saved counts**, so Run all does not repeat 4,000 API calls. The live example is separate and does not change those historical counts. The row-level classified file remains private.
 
 ## How to run it
 
-1. Download the included full dfall_clean.csv and upload **one** file with that exact name anywhere inside Google Drive's MyDrive. The 20-row sample is not the project dataset.
-2. Open [unknown_jobs.ipynb](unknown_jobs.ipynb) in Google Colab.
-3. To use the completed results from the November 24 Gemini run, put your private classified_jobs.csv beside dfall_clean.csv **in your Drive** before running the notebook. The notebook checks the source rows and loads all 4,000 labels. This file is available privately to the author; it is not in the public repository.
-4. Select **Runtime → Run all** and authorize Google Drive. Q1–Q3 use the saved results without an API key. The last cell needs an API key to ask Gemini a question.
-5. To classify from scratch or ask a question, add GOOGLE_API_KEY in Colab **Secrets** using your personal Google AI Studio API key, and turn **Notebook access** on. Never put a key in the notebook, README, or repository. By default, Part 4 classifies one batch of up to 20 titles per run. Rerun Part 4 to continue, or change max_batches=1 to max_batches=200 in the Part 4 cell for all remaining titles in one run. A full run can take many minutes and may stop at an API limit; completed batches are saved in Drive for the next run.
-6. The three outputs appear under Q1, Q2, and Q3. The last cell optionally asks Gemini to explain those calculated tables. Without the saved labels, the current-run Q2 and Q3 tables are provisional; the next section also displays completed results from the public aggregate file. The public file shows the finished findings, but only the private labels or a full Gemini run can recompute them from individual postings.
+1. Open the [notebook in Colab](https://colab.research.google.com/github/lp20590-star/Global-Job-Category-Imputation-Labor-Market-Intelligence/blob/main/unknown_jobs.ipynb).
+2. In Colab **Secrets**, add `GOOGLE_API_KEY` and enable **Notebook access**. The key is never typed into the notebook or repository. This is needed for the live Gemini example and the outside-tool rubric item.
+3. Select **Runtime → Run all**. The notebook installs `google-genai`, downloads both public CSVs from this repository, calls Gemini once, and prints the three answers and a decision. No Google Drive mount or file upload is required.
 
-The notebook does not assume that a partial batch or an uncertain prediction is a valid filled label. It checks every row and allowed sector before saving a batch. If the source CSV changes, rename the older classified_jobs.csv before rerunning.
+If the secret or API is unavailable, the live example prints an error message and the saved Q1–Q3 answers still run. A successful live Gemini call is required to demonstrate the outside-tool criterion. The `gemini-3.5-flash-lite` model and `google-genai` package may depend on the availability and limits of your API account.
 
 ## Example output
 
-The following Q1 numbers were recalculated from the included 4,000-row CSV:
+These are real results from the included CSVs. The live Gemini example varies with the API response.
 
-| Country | Postings | Missing | Missing % |
-| --- | ---: | ---: | ---: |
-| Germany | 500 | 434 | 86.8% |
-| Switzerland | 500 | 355 | 71.0% |
-| France | 500 | 325 | 65.0% |
-| Spain | 500 | 323 | 64.6% |
-| Netherlands | 500 | 281 | 56.2% |
-| Italy | 500 | 159 | 31.8% |
-| United Kingdom | 500 | 2 | 0.4% |
-| USA | 500 | 0 | 0.0% |
+```text
+Postings loaded: 4000
+Q1 · Missing categories by country
+          country  postings  missing  percent
+0         Germany       500      434     86.8
+1     Switzerland       500      355     71.0
+2          France       500      325     65.0
+3           Spain       500      323     64.6
+4     Netherlands       500      281     56.2
+5           Italy       500      159     31.8
+6  United Kingdom       500        2      0.4
+7             USA       500        0      0.0
 
-**Q2 · Completed Gemini run (November 24):** 4,000 titles were processed. Gemini assigned a sector to 3,995 and marked 5 uncertain. Among the 2,093 source tags that map to the 16 sectors, 2,091 received an AI sector; **1,355 of those 2,091 matched (64.8%)**. Gemini filled **1,876 of 1,879** originally missing categories; the other 3 were uncertain. The most common sectors hidden in missing categories were Trades & Construction (407), Logistics & Supply Chain (227), Engineering (204), Finance (176), Sales (157), and Healthcare (132). These results supersede the unsupported earlier figure of 913/2,121 (43%). Agreement with an existing source tag is not verified accuracy.
+Q2 · Agreement and hidden sectors
+Agreement: 1355 of 2091 = 64.8 %
+Missing categories filled: 1876 of 1879
+                              sector  count
+1               trade & construction    407
+2   logistics, driver & supply chain    227
+3                        engineering    204
+4      accounting, banking & finance    176
 
-**Q3 · Selected country changes (original sector count → after labeling):**
+Q3 · Top sectors after filling missing categories
+           country                            sector  before  after  change
+20         Germany                       engineering       6     81      75
+21         Germany              healthcare & nursing       9     73      64
+18          France     accounting, banking & finance       3    105     102
+32     Switzerland              trade & construction      65    162      97
 
-| Country | Sector | Before | After |
-| --- | --- | ---: | ---: |
-| Germany | Engineering | 6 | 81 |
-| Germany | Healthcare | 9 | 73 |
-| Germany | Trades & Construction | 0 | 67 |
-| France | Healthcare | 128 | 156 |
-| France | Finance | 3 | 105 |
-| Switzerland | Trades & Construction | 65 | 162 |
-| Spain | Trades & Construction | 0 | 114 |
+Decision: Repair categories in Germany first; test engineering campaigns there.
+```
 
-**Recommendation:** Prioritize category repair in Germany, where 434 of 500 source categories were missing. After labeling, engineering leads its specific sectors in this sample; test an engineering recruiter plan or targeted campaign there. Three missing rows remain uncertain. The before/after changes are reclassifications of sampled postings, not employment growth.
-
-## Exam guide
-
-- **Load:** pd.read_csv reads the complete CSV. A row is one posting; the title is the unstructured input.
-- **Missing flag:** isin checks whether a source tag is unknown or other-general-jobs.
-- **Q1:** groupby country counts all rows and sums True missing flags. The percentage is missing divided by postings times 100.
-- **Gemini:** classify sends up to 20 indexed titles per batch, accepts only one allowed label per index, writes ai_type, and saves after each valid batch. The max_batches setting controls how many batches Part 4 processes per run. The class keeps the DataFrame in self.jobs.
-- **Q2:** Filter known mapped sectors with an AI label; compare before_type to ai_type. Count newly identified sectors only in rows originally missing.
-- **Q3:** Copy before_type to after_type and replace it with ai_type only where the category was originally missing and Gemini returned an allowed sector. Count sectors by country before and after. A change reflects relabeling of sampled postings, not growth in employment.
-- **Chat:** ask passes the pandas summaries to Gemini and asks it to explain the evidence. Python does all counting; Gemini reads titles and writes prose.
+The full output also lists the other hidden sectors and top three sectors for all eight countries. The 2,091 agreement denominator excludes two uncertain AI labels among 2,093 comparable source labels. Three of 1,879 originally missing rows remained uncertain. Agreement with an existing tag is **not verified accuracy**. Before/after changes are reclassification of sampled postings, **not employment growth**.
 
 ## AI Use Disclosure
 
-AI assistance was used to review the rubric, simplify and debug the notebook, and draft documentation. The code was checked against the included 4,000-row CSV and a simulated API response. On November 24, Gemini classified all 4,000 titles through the deployed Streamlit app using the same 16-sector taxonomy; the resulting labels were checked against the source CSV and the notebook's pandas calculations. The notebook-compatible result file is kept private. The completed notebook output and public aggregate file were calculated from that private result file; placing it beside the source CSV in Drive recomputes the displayed tables.
+AI assistance helped simplify and review the notebook and this README. Gemini labeled the job titles in the earlier completed run and is called for one live example in the notebook. The pandas counts were checked against the included original CSV and public aggregate file. The user should be able to explain each cell and formula on the exam.
 
-## Optional Streamlit web app
+## Optional Streamlit app and Honors report
 
-[Open the deployed Streamlit app](https://global-job-category-imputation-labor-market-intelligence-gcul5.streamlit.app/). Its sidebar can classify pending titles in batches and its tabs show the audit, AI labels, sector changes, and a data question. App predictions last for the current browser session; the Colab notebook saves its own classified_jobs.csv in Drive. The deployment's API features require GOOGLE_API_KEY in Streamlit secrets.
+The [deployed Streamlit app](https://global-job-category-imputation-labor-market-intelligence-gcul5.streamlit.app/) is an optional interface. Its API features require a separate Streamlit secret; its code is separate from the Colab notebook. The Honors Option also requires a separate 3–5 page report submitted through eLC.
 
-## Honors report
-
-The Honors Option also requires a separate 3–5 page report with Question and data, How you built the new column, What you found, Business implications, and Limitations. Submit that report and this repository link through the appropriate eLC dropboxes by the course deadline.
-
-## Author
-
-Levi Michael Press · University of Georgia, Terry College of Business
+Levi Michael Press · University of Georgia
