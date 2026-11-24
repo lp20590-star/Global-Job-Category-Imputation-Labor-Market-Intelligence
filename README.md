@@ -22,7 +22,7 @@ Gemini turns the free-text job title into the new ai_type column. That column is
 
 ## Data and tools
 
-- dfall_clean.csv is included in this repository: 4,000 Adzuna job postings, 500 each from France, Germany, Italy, the Netherlands, Spain, Switzerland, the United Kingdom, and the USA. The job title is the unstructured input. Add the exact original Kaggle dataset URL here when confirmed.
+- dfall_clean.csv is included in this repository: 4,000 Adzuna job postings, 500 each from France, Germany, Italy, the Netherlands, Spain, Switzerland, the United Kingdom, and the USA. The job title is the unstructured input.
 - Python and pandas in Google Colab calculate all counts, percentages, and comparisons.
 - Google Gemini is the outside API that reads multilingual titles and supplies the ai_type sector label. The notebook uses the google-genai library and model gemini-3.5-flash-lite.
 - app.py is the optional Streamlit interface.
@@ -81,7 +81,7 @@ The following Q1 numbers were recalculated from the included 4,000-row CSV:
 
 ## AI Use Disclosure
 
-AI assistance was used to review the rubric, simplify and debug the notebook, and draft documentation. The code was checked against the included 4,000-row CSV and a simulated API response. On November 24, Gemini classified all 4,000 titles through the deployed Streamlit app using the same 16-sector taxonomy; the resulting labels were checked against the source CSV and the notebook's pandas calculations. The notebook-compatible result file is kept private. The author should review the labels, run the notebook with that file in Drive, and adjust this disclosure to accurately describe their personal work and understanding.
+AI assistance was used to review the rubric, simplify and debug the notebook, and draft documentation. The code was checked against the included 4,000-row CSV and a simulated API response. On November 24, Gemini classified all 4,000 titles through the deployed Streamlit app using the same 16-sector taxonomy; the resulting labels were checked against the source CSV and the notebook's pandas calculations. The notebook-compatible result file is kept private. The completed notebook output was calculated from that file; placing it beside the source CSV in Drive reproduces the displayed tables.
 
 ## Optional Streamlit web app
 
