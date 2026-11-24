@@ -1,0 +1,42 @@
+part,known,checked,matches,filled,missing,sector,count,country,before,after,change
+agreement,2093.0,2091.0,1355.0,1876.0,1879.0,,,,,,
+hidden,,,,,,trade & construction,407.0,,,,
+hidden,,,,,,"logistics, driver & supply chain",227.0,,,,
+hidden,,,,,,engineering,204.0,,,,
+hidden,,,,,,"accounting, banking & finance",176.0,,,,
+hidden,,,,,,sales & business development,157.0,,,,
+hidden,,,,,,healthcare & nursing,132.0,,,,
+hidden,,,,,,"maintenance, cleaning & facility",122.0,,,,
+hidden,,,,,,it & software development,102.0,,,,
+hidden,,,,,,other / specialized,97.0,,,,
+hidden,,,,,,hospitality & catering,63.0,,,,
+hidden,,,,,,administrative & office support,52.0,,,,
+hidden,,,,,,customer service & support,44.0,,,,
+hidden,,,,,,hr & recruitment,27.0,,,,
+hidden,,,,,,social work & care,27.0,,,,
+hidden,,,,,,teaching & education,24.0,,,,
+hidden,,,,,,"marketing, pr & advertising",15.0,,,,
+shift,,,,,,healthcare & nursing,,France,128.0,156.0,28.0
+shift,,,,,,"accounting, banking & finance",,France,3.0,105.0,102.0
+shift,,,,,,trade & construction,,France,0.0,61.0,61.0
+shift,,,,,,engineering,,Germany,6.0,81.0,75.0
+shift,,,,,,healthcare & nursing,,Germany,9.0,73.0,64.0
+shift,,,,,,trade & construction,,Germany,0.0,67.0,67.0
+shift,,,,,,other / specialized,,Italy,117.0,123.0,6.0
+shift,,,,,,"logistics, driver & supply chain",,Italy,44.0,52.0,8.0
+shift,,,,,,sales & business development,,Italy,12.0,52.0,40.0
+shift,,,,,,"logistics, driver & supply chain",,Netherlands,50.0,118.0,68.0
+shift,,,,,,trade & construction,,Netherlands,7.0,63.0,56.0
+shift,,,,,,other / specialized,,Netherlands,35.0,52.0,17.0
+shift,,,,,,trade & construction,,Spain,0.0,114.0,114.0
+shift,,,,,,it & software development,,Spain,31.0,83.0,52.0
+shift,,,,,,sales & business development,,Spain,49.0,73.0,24.0
+shift,,,,,,trade & construction,,Switzerland,65.0,162.0,97.0
+shift,,,,,,engineering,,Switzerland,12.0,81.0,69.0
+shift,,,,,,"logistics, driver & supply chain",,Switzerland,6.0,51.0,45.0
+shift,,,,,,healthcare & nursing,,USA,179.0,179.0,0.0
+shift,,,,,,hospitality & catering,,USA,67.0,67.0,0.0
+shift,,,,,,customer service & support,,USA,56.0,56.0,0.0
+shift,,,,,,teaching & education,,United Kingdom,103.0,105.0,2.0
+shift,,,,,,engineering,,United Kingdom,48.0,48.0,0.0
+shift,,,,,,"logistics, driver & supply chain",,United Kingdom,43.0,43.0,0.0
