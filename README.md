@@ -31,10 +31,10 @@ Gemini turns the free-text job title into the new ai_type column. That column is
 
 1. Download the included full dfall_clean.csv and upload **one** file with that exact name anywhere inside Google Drive's MyDrive. The 20-row sample is not the project dataset.
 2. Open [Unknown_jobs.ipynb](Unknown_jobs.ipynb) in Google Colab.
-3. In Colab **Secrets**, add GOOGLE_API_KEY using your personal Google AI Studio API key, and turn **Notebook access** on. Never put a key in the notebook, README, or repository.
-4. Select **Runtime → Run all** and authorize Google Drive. The first run tries up to 200 requests of 20 titles each, with a four-second pause between requests. This may take more than 13 minutes, and API quota or invalid model output can interrupt it.
-5. To use the completed results from the November 24 Gemini run, put your private classified_jobs.csv beside dfall_clean.csv **in your Drive** before running the notebook. The notebook checks the source rows and loads all 4,000 labels. This file is available privately to the author; it is not in the public repository. If you classify from scratch, completed batches are saved to the same path, so a rerun continues from where it stopped.
-6. The three outputs appear under Q1, Q2, and Q3. The last cell optionally asks Gemini to explain those calculated tables. Without a Colab key, Run all displays Q1 and provisional tables and prints how to enable the API.
+3. To use the completed results from the November 24 Gemini run, put your private classified_jobs.csv beside dfall_clean.csv **in your Drive** before running the notebook. The notebook checks the source rows and loads all 4,000 labels. This file is available privately to the author; it is not in the public repository.
+4. Select **Runtime → Run all** and authorize Google Drive. Q1–Q3 use the saved results without an API key. The last cell needs an API key to ask Gemini a question.
+5. To classify from scratch or ask a question, add GOOGLE_API_KEY in Colab **Secrets** using your personal Google AI Studio API key, and turn **Notebook access** on. Never put a key in the notebook, README, or repository. Classifying 4,000 titles takes up to 200 requests of 20 titles each, with a four-second pause. API quota or invalid model output can interrupt it; completed batches are saved in Drive for the next run.
+6. The three outputs appear under Q1, Q2, and Q3. The last cell optionally asks Gemini to explain those calculated tables. Without the saved labels or a key, only Q1 is complete; the notebook flags the other outputs as provisional.
 
 The notebook does not assume that a partial batch or an uncertain prediction is a valid filled label. It checks every row and allowed sector before saving a batch. If the source CSV changes, rename the older classified_jobs.csv before rerunning.
 
