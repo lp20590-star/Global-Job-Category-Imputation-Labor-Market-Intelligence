@@ -33,7 +33,7 @@ Gemini turns the free-text job title into the new ai_type column. That column is
 2. Open [Unknown_jobs.ipynb](Unknown_jobs.ipynb) in Google Colab.
 3. In Colab **Secrets**, add GOOGLE_API_KEY using your personal Google AI Studio API key, and turn **Notebook access** on. Never put a key in the notebook, README, or repository.
 4. Select **Runtime → Run all** and authorize Google Drive. The first run tries up to 200 requests of 20 titles each, with a four-second pause between requests. This may take more than 13 minutes, and API quota or invalid model output can interrupt it.
-5. Completed labels are automatically saved to classified_jobs.csv beside dfall_clean.csv **in your Drive**. If interrupted, rerun the notebook; it validates this file, skips completed rows, and continues. Do not delete it until you are done. The printed unresolved count tells you whether country shifts are provisional.
+5. To use the completed results from the November 24 Gemini run, put your private classified_jobs.csv beside dfall_clean.csv **in your Drive** before running the notebook. The notebook checks the source rows and loads all 4,000 labels. This file is available privately to the author; it is not in the public repository. If you classify from scratch, completed batches are saved to the same path, so a rerun continues from where it stopped.
 6. The three outputs appear under Q1, Q2, and Q3. The last cell optionally asks Gemini to explain those calculated tables. Without a Colab key, Run all displays Q1 and provisional tables and prints how to enable the API.
 
 The notebook does not assume that a partial batch or an uncertain prediction is a valid filled label. It checks every row and allowed sector before saving a batch. If the source CSV changes, rename the older classified_jobs.csv before rerunning.
@@ -53,7 +53,21 @@ The following Q1 numbers were recalculated from the included 4,000-row CSV:
 | United Kingdom | 500 | 2 | 0.4% |
 | USA | 500 | 0 | 0.0% |
 
-**Recommendation from Q1:** Prioritize category repair in Germany. Q2 agreement and Q3 sector shifts must be taken from an actual Gemini run; no completed Gemini output is included here. The earlier claim of 913/2,121 (43%) is not supported by the current notebook and should not be reused without verifying its saved labels and denominator.
+**Q2 · Completed Gemini run (November 24):** 4,000 titles were processed. Gemini assigned a sector to 3,995 and marked 5 uncertain. Among the 2,093 source tags that map to the 16 sectors, 2,091 received an AI sector; **1,355 of those 2,091 matched (64.8%)**. Gemini filled **1,876 of 1,879** originally missing categories; the other 3 were uncertain. The most common sectors hidden in missing categories were Trades & Construction (407), Logistics & Supply Chain (227), Engineering (204), Finance (176), Sales (157), and Healthcare (132). These results supersede the unsupported earlier figure of 913/2,121 (43%). Agreement with an existing source tag is not verified accuracy.
+
+**Q3 · Selected country changes (original sector count → after labeling):**
+
+| Country | Sector | Before | After |
+| --- | --- | ---: | ---: |
+| Germany | Engineering | 6 | 81 |
+| Germany | Healthcare | 9 | 73 |
+| Germany | Trades & Construction | 0 | 67 |
+| France | Healthcare | 128 | 156 |
+| France | Finance | 3 | 105 |
+| Switzerland | Trades & Construction | 65 | 162 |
+| Spain | Trades & Construction | 0 | 114 |
+
+**Recommendation:** Prioritize category repair in Germany, where 434 of 500 source categories were missing. After labeling, engineering leads its specific sectors in this sample; test an engineering recruiter plan or targeted campaign there. Three missing rows remain uncertain. The before/after changes are reclassifications of sampled postings, not employment growth.
 
 ## Exam guide
 
@@ -67,7 +81,7 @@ The following Q1 numbers were recalculated from the included 4,000-row CSV:
 
 ## AI Use Disclosure
 
-AI assistance was used to review the rubric, simplify and debug the notebook, and draft documentation. The code was checked against the included 4,000-row CSV and a simulated API response. **A live Gemini run and its resulting agreement and sector counts have not been verified in this version.** Before submission, the author should run the notebook using their own Colab secret, review the AI labels and output, and adjust this disclosure to accurately describe their personal work and understanding.
+AI assistance was used to review the rubric, simplify and debug the notebook, and draft documentation. The code was checked against the included 4,000-row CSV and a simulated API response. On November 24, Gemini classified all 4,000 titles through the deployed Streamlit app using the same 16-sector taxonomy; the resulting labels were checked against the source CSV and the notebook's pandas calculations. The notebook-compatible result file is kept private. The author should review the labels, run the notebook with that file in Drive, and adjust this disclosure to accurately describe their personal work and understanding.
 
 ## Optional Streamlit web app
 
