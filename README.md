@@ -1,108 +1,82 @@
-# Global-Job-Category-Imputation-Labor-Market-Intelligence
+# Global Job Category Imputation and Labor Market Intelligence
 
-My app helps job boards identify unknown job categories using AI and determine how classifying these postings changes the most common jobs across countries.
+My app helps **job boards** decide **where to repair missing job categories and which sector campaigns to test** by labeling job titles and comparing sectors across eight countries.
 
-> A course project for **MIST 4600: Computer Programming in Business** at the University of Georgia's Terry College of Business (Fall 2026).
+> MIST 4600 Honors Option · University of Georgia · Fall 2026
 
 ## Problem
 
-Nearly 47% of international job postings are labeled "unknown" or "other/general," making it difficult for job boards and recruiters to accurately identify hiring trends. My app uses AI to classify these missing categories and determine how the results change our understanding of labor markets across different countries.
+Job boards cannot reliably sort or market postings when their category is missing. In this dataset, **1,879 of 4,000 postings (47.0%)** have an original tag of unknown or other-general-jobs. Each country has 500 sampled postings, so these results describe this dataset, not the size of a country's labor market.
 
 ## What it does
 
-My app answers three questions:
+The notebook answers three connected questions with pandas:
 
-1. **Audit:** How many postings have missing categories in each country? Germany has 86.8% missing, while the USA and UK have almost none.
-2. **LLM Check:** How often does Gemini match existing labels, and what jobs were hidden? The baseline exact match rate is 43%, revealing jobs in Trades, Finance, Healthcare, and Sales.
-3. **Shifts & Action:** How do the most common jobs change by country after classification, and how can job boards improve recruitment and advertising decisions?
+1. **Audit:** How many postings have missing categories in each country? This identifies where category repair matters most.
+2. **LLM check:** How often does Gemini's title-based sector label agree with an existing mapped sector? Which sectors does it find among originally missing rows? Agreement with an existing tag is a check, not proof that either label is correct.
+3. **Shifts and action:** How do sector counts change after filling missing labels? The app recommends repairing categories first in the country with the highest original missing share, then testing sector-specific recruiter and advertising campaigns.
 
-## Data
+Gemini turns the free-text job title into the new ai_type column. That column is used in questions 2 and 3. Existing known sectors stay unchanged in the before/after comparison. The class JobChatbot holds the jobs, classifies titles in batches, and answers questions using the calculated tables.
 
-The dataset comes from **Kaggle** and contains 4,000 job postings across eight countries: USA, UK, Germany, France, Netherlands, Italy, Spain, and Switzerland (500 per country).
+**Comparison rule:** The CSV has 2,121 rows with a nonmissing category. Of these, **2,093** map to the 16 chosen job sectors. The other 28 have part-time, graduate, or charity/voluntary tags. They are shown as outside taxonomy and excluded from exact sector agreement. The agreement denominator counts only those of the 2,093 that Gemini actually labeled with a sector; uncertain labels are excluded and should be reported separately.
 
-Each row represents one job posting. The primary unstructured data consists of multilingual job titles, which are analyzed using AI to classify missing job categories.
+## Data and tools
 
-Dataset link: Coming soon
-
-## Built with
-
-- Python and pandas in Google Colab
-- Google Gemini AI for job classification
+- dfall_clean.csv is included in this repository: 4,000 Adzuna job postings, 500 each from France, Germany, Italy, the Netherlands, Spain, Switzerland, the United Kingdom, and the USA. The job title is the unstructured input. Add the exact original Kaggle dataset URL here when confirmed.
+- Python and pandas in Google Colab calculate all counts, percentages, and comparisons.
+- Google Gemini is the outside API that reads multilingual titles and supplies the ai_type sector label. The notebook uses the google-genai library and model gemini-3.5-flash-lite.
+- app.py is the optional Streamlit interface.
 
 ## How to run it
-1. **Get the data:** Use `dfall_clean.csv` (4,000 international Adzuna job postings from Kaggle's Global Job Market & Salary dataset, or the included 20-row `sample_rows__3__629d0f3b (2).csv` test file in this repository).
-2. **Put the data in Google Drive:** Upload `dfall_clean.csv` to your Google Drive (for example, inside `MyDrive/MIST 4600/`). Cell 1 mounts Google Drive (`drive.mount("/content/drive")`) and automatically finds and loads the CSV.
-3. **Open the notebook:** Open `Global_Job_Category_Imputation_Labor_Market_Intelligence.ipynb` in Google Colab.
-4. **Add your API key in Colab Secrets (never type a key into the code):**
-   - Click the **Key icon (Secrets)** on the left sidebar in Google Colab.
-   - Add a secret named **`GOOGLE_API_KEY`** with your Google AI Studio Gemini key.
-   - Toggle **Notebook access** to **ON** (Cell 4 reads it safely using `userdata.get("GOOGLE_API_KEY")`).
-5. **Run from top to bottom:** Click **Runtime → Run all** and approve the Google Drive prompt. Cells 1–8 run in order (pausing 4 seconds per Gemini call to stay under free-tier rate limits) and save the classified sample to `classified_jobs.csv`.
+
+1. Download the included full dfall_clean.csv and upload **one** file with that exact name anywhere inside Google Drive's MyDrive. The 20-row sample is not the project dataset.
+2. Open [Unknown_jobs.ipynb](Unknown_jobs.ipynb) in Google Colab.
+3. In Colab **Secrets**, add GOOGLE_API_KEY using your personal Google AI Studio API key, and turn **Notebook access** on. Never put a key in the notebook, README, or repository.
+4. Select **Runtime → Run all** and authorize Google Drive. The first run tries up to 200 requests of 20 titles each, with a four-second pause between requests. This may take more than 13 minutes, and API quota or invalid model output can interrupt it.
+5. Completed labels are automatically saved to classified_jobs.csv beside dfall_clean.csv **in your Drive**. If interrupted, rerun the notebook; it validates this file, skips completed rows, and continues. Do not delete it until you are done. The printed unresolved count tells you whether country shifts are provisional.
+6. The three outputs appear under Q1, Q2, and Q3. The last cell optionally asks Gemini to explain those calculated tables. Without a Colab key, Run all displays Q1 and provisional tables and prints how to enable the API.
+
+The notebook does not assume that a partial batch or an uncertain prediction is a valid filled label. It checks every row and allowed sector before saving a batch. If the source CSV changes, rename the older classified_jobs.csv before rerunning.
 
 ## Example output
-```text
-Loaded 4000 jobs from: /content/drive/MyDrive/MIST 4600/dfall_clean.csv
 
-country
-France         164
-Germany        411
-Italy           13
-Netherlands    253
-Spain          254
-Switzerland     13
-dtype: int64
+The following Q1 numbers were recalculated from the included 4,000-row CSV:
 
-Germany: 86.8% missing
-Switzerland: 71.0% missing
-France: 65.0% missing
-Spain: 64.6% missing
-Netherlands: 56.2% missing
-Italy: 31.8% missing
-United Kingdom: 0.4% missing
-USA: 0.0% missing
+| Country | Postings | Missing | Missing % |
+| --- | ---: | ---: | ---: |
+| Germany | 500 | 434 | 86.8% |
+| Switzerland | 500 | 355 | 71.0% |
+| France | 500 | 325 | 65.0% |
+| Spain | 500 | 323 | 64.6% |
+| Netherlands | 500 | 281 | 56.2% |
+| Italy | 500 | 159 | 31.8% |
+| United Kingdom | 500 | 2 | 0.4% |
+| USA | 500 | 0 | 0.0% |
 
-Mean salary by country:
-country
-France            123224.470
-Germany            23114.742
-Italy              19035.106
-Netherlands        34016.826
-Spain               7019.120
-Switzerland        31469.002
-USA                74163.670
-United Kingdom     39405.110
+**Recommendation from Q1:** Prioritize category repair in Germany. Q2 agreement and Q3 sector shifts must be taken from an actual Gemini run; no completed Gemini output is included here. The earlier claim of 913/2,121 (43%) is not supported by the current notebook and should not be reused without verifying its saved labels and denominator.
 
-=== FINAL RECOMMENDATION ===
-1. Biggest blind spot: Germany at 86.8% missing categories.
-2. Priority markets (15%+ unlabeled): Germany (86.8%), Switzerland (71.0%), France (65.0%), Spain (64.6%), Netherlands (56.2%), Italy (31.8%)
-3. Action: Use Gemini auto-classification on unlabeled titles before running search ads and recruiter packages.
+## Exam guide
+
+- **Load:** pd.read_csv reads the complete CSV. A row is one posting; the title is the unstructured input.
+- **Missing flag:** isin checks whether a source tag is unknown or other-general-jobs.
+- **Q1:** groupby country counts all rows and sums True missing flags. The percentage is missing divided by postings times 100.
+- **Gemini:** classify sends 20 indexed titles, accepts only one allowed label per index, writes ai_type, and saves after each valid batch. The class keeps the DataFrame in self.jobs.
+- **Q2:** Filter known mapped sectors with an AI label; compare before_type to ai_type. Count newly identified sectors only in rows originally missing.
+- **Q3:** Copy before_type to after_type and replace it with ai_type only where the category was originally missing and Gemini returned an allowed sector. Count sectors by country before and after. A change reflects relabeling of sampled postings, not growth in employment.
+- **Chat:** ask passes the pandas summaries to Gemini and asks it to explain the evidence. Python does all counting; Gemini reads titles and writes prose.
 
 ## AI Use Disclosure
 
-- **Tools used:** Google Gemini (`gemini-3.8-flash` via the `google.genai` API in Colab) and AI assistance for drafting/debugging code and documentation.
-- **What I asked:** Help organizing pandas missing-category checks into a class, connecting to the Gemini API and Frankfurter currency API using Colab Secrets (`GOOGLE_API_KEY`), and fixing rate-limit/empty-country errors.
-- **What I changed:** Switched the model name to `gemini-3.8-flash`, added a zero-row check in `missing_rate`, lowered the live demo sample to 5 rows with `time.sleep(4)`, and adjusted prompts and category labels to 16 standardized sectors.
-- **What I wrote / verified myself:** Dataset loading from Google Drive, `unknown_by_country`, the sub-questions and country targets, `JobPostingAnalyzer` methods, and running/verifying every cell top-to-bottom on `dfall_clean.csv`.
-- **Line-by-line understanding:** Yes — every cell uses MIST 4600 course Python (`for`, `if`, functions, `class`, `pandas`, `requests`, `google.genai`), and I can explain every line without AI.
+AI assistance was used to review the rubric, simplify and debug the notebook, and draft documentation. The code was checked against the included 4,000-row CSV and a simulated API response. **A live Gemini run and its resulting agreement and sector counts have not been verified in this version.** Before submission, the author should run the notebook using their own Colab secret, review the AI labels and output, and adjust this disclosure to accurately describe their personal work and understanding.
 
-## Live Web App — Project Stretch Goal
+## Optional Streamlit web app
 
-[Open the live Streamlit app](https://global-job-category-imputation-labor-market-intelligence-gcul5.streamlit.app/)
+[Open the deployed Streamlit app](https://global-job-category-imputation-labor-market-intelligence-gcul5.streamlit.app/). Its sidebar can classify pending titles in batches and its tabs show the audit, AI labels, sector changes, and a data question. App predictions last for the current browser session; the Colab notebook saves its own classified_jobs.csv in Drive. The deployment's API features require GOOGLE_API_KEY in Streamlit secrets.
 
-This project is deployed as a working web app on the free Streamlit Community Cloud. Users can explore 4,000 job postings across eight countries, view missing-category statistics, classify job titles using Gemini AI, and ask questions about the results.
+## Honors report
 
-The app includes:
-- Country filters and missing-category tables.
-- AI classification of job titles in batches of 20.
-- Comparisons of job categories before and after classification.
-- A chatbot that answers questions using the calculated results.
-
-To try it, select a country to explore its data, then click **Classify pending jobs** to process job titles. Open **Ask the data** to ask a question about the results.
-
-The app runs from `app.py`, loads `dfall_clean.csv` directly from this repository, and uses `requirements.txt` to install its dependencies.
+The Honors Option also requires a separate 3–5 page report with Question and data, How you built the new column, What you found, Business implications, and Limitations. Submit that report and this repository link through the appropriate eLC dropboxes by the course deadline.
 
 ## Author
 
-Levi Michael Press
-
-University of Georgia | Terry College of Business
+Levi Michael Press · University of Georgia, Terry College of Business
