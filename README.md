@@ -33,8 +33,8 @@ Gemini turns the free-text job title into the new ai_type column. That column is
 2. Open [Unknown_jobs.ipynb](Unknown_jobs.ipynb) in Google Colab.
 3. To use the completed results from the November 24 Gemini run, put your private classified_jobs.csv beside dfall_clean.csv **in your Drive** before running the notebook. The notebook checks the source rows and loads all 4,000 labels. This file is available privately to the author; it is not in the public repository.
 4. Select **Runtime → Run all** and authorize Google Drive. Q1–Q3 use the saved results without an API key. The last cell needs an API key to ask Gemini a question.
-5. To classify from scratch or ask a question, add GOOGLE_API_KEY in Colab **Secrets** using your personal Google AI Studio API key, and turn **Notebook access** on. Never put a key in the notebook, README, or repository. Classifying 4,000 titles takes up to 200 requests of 20 titles each, with a four-second pause. API quota or invalid model output can interrupt it; completed batches are saved in Drive for the next run.
-6. The three outputs appear under Q1, Q2, and Q3. The last cell optionally asks Gemini to explain those calculated tables. Without the saved labels or a key, only Q1 is complete; the notebook flags the other outputs as provisional.
+5. To classify from scratch or ask a question, add GOOGLE_API_KEY in Colab **Secrets** using your personal Google AI Studio API key, and turn **Notebook access** on. Never put a key in the notebook, README, or repository. By default, Part 4 classifies one batch of up to 20 titles per run. Rerun Part 4 to continue, or set BATCHES = 200 for all remaining titles in one run. A full run can take many minutes and may stop at an API limit; completed batches are saved in Drive for the next run.
+6. The three outputs appear under Q1, Q2, and Q3. The last cell optionally asks Gemini to explain those calculated tables. Without the saved labels, Q2 and Q3 are provisional until all titles have been processed; the cell prints the number still pending.
 
 The notebook does not assume that a partial batch or an uncertain prediction is a valid filled label. It checks every row and allowed sector before saving a batch. If the source CSV changes, rename the older classified_jobs.csv before rerunning.
 
@@ -74,7 +74,7 @@ The following Q1 numbers were recalculated from the included 4,000-row CSV:
 - **Load:** pd.read_csv reads the complete CSV. A row is one posting; the title is the unstructured input.
 - **Missing flag:** isin checks whether a source tag is unknown or other-general-jobs.
 - **Q1:** groupby country counts all rows and sums True missing flags. The percentage is missing divided by postings times 100.
-- **Gemini:** classify sends 20 indexed titles, accepts only one allowed label per index, writes ai_type, and saves after each valid batch. The class keeps the DataFrame in self.jobs.
+- **Gemini:** classify sends up to 20 indexed titles per batch, accepts only one allowed label per index, writes ai_type, and saves after each valid batch. BATCHES controls how many batches Part 4 processes per run. The class keeps the DataFrame in self.jobs.
 - **Q2:** Filter known mapped sectors with an AI label; compare before_type to ai_type. Count newly identified sectors only in rows originally missing.
 - **Q3:** Copy before_type to after_type and replace it with ai_type only where the category was originally missing and Gemini returned an allowed sector. Count sectors by country before and after. A change reflects relabeling of sampled postings, not growth in employment.
 - **Chat:** ask passes the pandas summaries to Gemini and asks it to explain the evidence. Python does all counting; Gemini reads titles and writes prose.
