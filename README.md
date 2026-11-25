@@ -1,8 +1,8 @@
 # Global Job Category Imputation and Labor Market Intelligence
 
-My app helps a job board manager decide which country and sector to target for a first category-repair campaign.
-
 ## Problem
+
+My app helps a job board manager decide which country and sector to target for a first category-repair campaign by comparing missing tags and AI-labeled job titles across eight countries.
 
 A job seeker who filters for engineering can miss an engineering role if its category is blank or too general. In this sample of 4,000 Adzuna postings, 1,879 (47.0%) have the source tag `unknown` or `other-general-jobs`. There are 500 postings in each of eight countries. Each row describes one posting and includes its country, job title and original category.
 
