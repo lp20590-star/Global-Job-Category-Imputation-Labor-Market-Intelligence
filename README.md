@@ -62,6 +62,6 @@ I used ChatGPT/Codex to generate the Python code and help write this README. I a
 
 ## Optional Streamlit app
 
-Open the [live Streamlit app](https://global-job-category-imputation-labor-market-intelligence-gcul5.streamlit.app/). It shows the original category audit and can classify batches of job titles. Use the **Ask the data** tab to type a question and press **Enter**. The app uses its own deployment secret. The notebook above is the course submission entry point.
+Open the [live Streamlit app](https://global-job-category-imputation-labor-market-intelligence-gcul5.streamlit.app/). In **Ask the data**, type “Which country has the most missing categories?” and press **Enter**. The app answers questions about missing tags, agreement, hidden sectors, changes and the pilot directly from the selected data. Each new session starts with all titles pending. Live classification and open-ended chat use the app’s own Gemini secret. The Colab notebook above opens with the completed project results.
 
 Levi Michael Press · University of Georgia
