@@ -1,5 +1,7 @@
 # Global Job Category Imputation and Labor Market Intelligence
 
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/lp20590-star/Global-Job-Category-Imputation-Labor-Market-Intelligence/blob/main/unknown_jobs.ipynb)
+
 ## Problem
 
 My app helps a job board manager decide which country and sector to target for a first category-repair campaign by comparing missing tags and AI-labeled job titles across eight countries.
