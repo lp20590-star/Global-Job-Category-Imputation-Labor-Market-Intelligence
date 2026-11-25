@@ -1,0 +1,224 @@
+{
+  "audit": {
+    "country": [
+      "Germany",
+      "Switzerland",
+      "France",
+      "Spain",
+      "Netherlands",
+      "Italy",
+      "United Kingdom",
+      "USA"
+    ],
+    "postings": [
+      500,
+      500,
+      500,
+      500,
+      500,
+      500,
+      500,
+      500
+    ],
+    "unknown": [
+      411,
+      13,
+      164,
+      254,
+      253,
+      13,
+      0,
+      0
+    ],
+    "other_general": [
+      23,
+      342,
+      161,
+      69,
+      28,
+      146,
+      2,
+      0
+    ]
+  },
+  "agreement": {
+    "checked": 2091,
+    "matches": 1355
+  },
+  "hidden": {
+    "sector": [
+      "trade & construction",
+      "logistics, driver & supply chain",
+      "engineering",
+      "accounting, banking & finance",
+      "sales & business development",
+      "healthcare & nursing",
+      "maintenance, cleaning & facility",
+      "it & software development",
+      "other / specialized",
+      "hospitality & catering",
+      "administrative & office support",
+      "customer service & support",
+      "hr & recruitment",
+      "social work & care",
+      "teaching & education",
+      "marketing, pr & advertising"
+    ],
+    "count": [
+      407,
+      227,
+      204,
+      176,
+      157,
+      132,
+      122,
+      102,
+      97,
+      63,
+      52,
+      44,
+      27,
+      27,
+      24,
+      15
+    ]
+  },
+  "rankings": {
+    "France": {
+      "sector": [
+        "healthcare & nursing",
+        "accounting, banking & finance",
+        "trade & construction"
+      ],
+      "before": [
+        128,
+        3,
+        0
+      ],
+      "after": [
+        156,
+        105,
+        61
+      ]
+    },
+    "Germany": {
+      "sector": [
+        "engineering",
+        "healthcare & nursing",
+        "trade & construction"
+      ],
+      "before": [
+        6,
+        9,
+        0
+      ],
+      "after": [
+        81,
+        73,
+        67
+      ]
+    },
+    "Italy": {
+      "sector": [
+        "other / specialized",
+        "logistics, driver & supply chain",
+        "sales & business development"
+      ],
+      "before": [
+        117,
+        44,
+        12
+      ],
+      "after": [
+        123,
+        52,
+        52
+      ]
+    },
+    "Netherlands": {
+      "sector": [
+        "logistics, driver & supply chain",
+        "trade & construction",
+        "other / specialized"
+      ],
+      "before": [
+        50,
+        7,
+        35
+      ],
+      "after": [
+        118,
+        63,
+        52
+      ]
+    },
+    "Spain": {
+      "sector": [
+        "trade & construction",
+        "it & software development",
+        "sales & business development"
+      ],
+      "before": [
+        0,
+        31,
+        49
+      ],
+      "after": [
+        114,
+        83,
+        73
+      ]
+    },
+    "Switzerland": {
+      "sector": [
+        "trade & construction",
+        "engineering",
+        "logistics, driver & supply chain"
+      ],
+      "before": [
+        65,
+        12,
+        6
+      ],
+      "after": [
+        162,
+        81,
+        51
+      ]
+    },
+    "USA": {
+      "sector": [
+        "healthcare & nursing",
+        "hospitality & catering",
+        "customer service & support"
+      ],
+      "before": [
+        179,
+        67,
+        56
+      ],
+      "after": [
+        179,
+        67,
+        56
+      ]
+    },
+    "United Kingdom": {
+      "sector": [
+        "teaching & education",
+        "engineering",
+        "logistics, driver & supply chain"
+      ],
+      "before": [
+        103,
+        48,
+        43
+      ],
+      "after": [
+        105,
+        48,
+        43
+      ]
+    }
+  }
+}
