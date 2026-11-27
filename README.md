@@ -1,4 +1,4 @@
-# Global Job Category Imputation and Labor Market Intelligence
+# Job Category Chatbot
 
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/lp20590-star/Global-Job-Category-Imputation-Labor-Market-Intelligence/blob/main/unknown_jobs.ipynb)
 
@@ -6,32 +6,32 @@
 
 My app helps a job board manager decide which country and sector to target for a first category-repair campaign by comparing missing tags and AI-labeled job titles across eight countries.
 
-A job seeker who filters for engineering can miss an engineering role if its category is blank or too general. In this sample of 4,000 Adzuna postings, 1,879 (47.0%) have the source tag `unknown` or `other-general-jobs`. There are 500 postings in each of eight countries. Each row describes one posting and includes its country, job title and original category.
+A job seeker filtering for engineering can miss a relevant posting when its category is blank or too general. The dataset contains 4,000 Adzuna job postings, 500 in each of eight countries. Each row has a country, a free-text job title and an original category. I count the source tags `unknown` and `other-general-jobs` as missing. [Original postings](dfall_clean.csv)
 
 ## What it does
 
-| Question | Notebook function | Output |
+| Sub-question | Function | What the manager sees |
 | --- | --- | --- |
-| Q1. Where are the most categories missing? | `missing_by_country` | Adds the two missing-tag counts, calculates the percentage in each country, and finds the highest share. |
-| Q2. How often did Gemini agree with comparable tags, and which sectors were hidden? | `agreement_and_hidden` | Calculates agreement, lists all 16 hidden-sector counts and shows the current AI label for one UK title. |
-| Q3. Which sectors lead after repair, and where should the manager run a pilot? **My original sub-question.** | `sector_shifts` | Calculates changes for the top three sectors in each country, uses the UK example to measure the effect of one repair, and recommends a country and sector. |
+| 1. Where do job postings have the most missing categories? | `missing_by_country` | A pandas table of counts and percentages for all eight countries. Germany has the highest missing share, 434 of 500 postings (86.8%). |
+| 2. How often did Gemini agree with comparable tags, and which sectors were hidden? | `agreement_and_hidden` | Agreement is 64.8% across 2,091 comparisons. The table shows all 16 hidden sectors. Trade and construction leads with 407 postings. |
+| 3. Which sectors lead after repair, and where should the manager run a pilot? **My original sub-question.** | `sector_shifts` | A before-and-after table for each country’s three leading sectors. The pilot recommendation is Germany, where engineering rises from 6 to 81 postings after repair. |
 
-The full classifier sent job titles and countries to Gemini and recorded an `ai_type` sector or `uncertain`. Q2 uses that column to measure agreement and count previously hidden sectors. Q3 keeps the known original sectors and adds valid AI labels for missing ones. The downloadable results contain total counts from the completed run. The full classifier and its prompt are in [app.py](app.py).
+**How Gemini contributes.** The full classifier sent job titles and countries to Gemini and saved each returned sector in a new `ai_type` column. Q2 uses the resulting counts to compare AI labels with existing tags and identify hidden sectors. Q3 uses the repaired counts to recommend a pilot. The notebook also demonstrates both uses with one UK title, `Teaching Assistant`. Q2 displays its `ai_type`. Q3 checks whether that label adds one posting to teaching and education. [Full classifier](app.py) · [Recorded Gemini example](https://github.com/lp20590-star/Global-Job-Category-Imputation-Labor-Market-Intelligence/blob/a0b8be558dab319dcd299b067ad72a16af3b58dc/unknown_jobs.ipynb)
 
-The notebook uses one small [JSON file of public counts](project_counts.json). Its audit table counts the two original missing tags separately for each country in [dfall_clean.csv](dfall_clean.csv). Its agreement counts, 16 hidden-sector counts and 24 ranking rows come from [completed_results.csv](completed_results.csv). Each country’s three ranking rows are ordered by final count, with ties in alphabetical order. The notebook calculates missing shares, agreement, coverage and changes from these numbers.
-
-The `JobChatbot` class answers from the calculated results. In default mode, keywords retrieve the missing-tag audit, agreement, hidden sectors, changes or pilot recommendation. In live mode, Gemini answers free-text questions using those same results. The one-title example uses a recorded Gemini answer in default mode. In live mode, `label_title` calls Gemini and validates a fresh sector before Q2 and Q3 use it. [Earlier Colab run with the recorded Gemini response](https://github.com/lp20590-star/Global-Job-Category-Imputation-Labor-Market-Intelligence/blob/a0b8be558dab319dcd299b067ad72a16af3b58dc/unknown_jobs.ipynb)
+`JobChatbot` stores the computed answers in `__init__`. The last cell calls its `ask` method to answer the question you type.
 
 ## How to run it
 
-1. Click **Open in Colab** at the top of this page or [open the notebook directly](https://colab.research.google.com/github/lp20590-star/Global-Job-Category-Imputation-Labor-Market-Intelligence/blob/main/unknown_jobs.ipynb).
-2. Leave `RUN_LIVE = False` in section 1 and choose **Runtime → Run all**. Requests downloads the public JSON from this repository. The default needs internet access and runs without a personal key or file upload.
-3. To chat, edit the quoted `question` in the **last code cell** and press **Shift + Enter**. Try “How often did Gemini agree?”, “Which sectors were hidden?”, or “Where should we run the pilot?” Each asks for a different calculated answer.
-4. For **fresh Gemini classification and open-ended chat**, enable notebook access to `GOOGLE_API_KEY` in Colab Secrets, change `RUN_LIVE` to `True` and run all once. This makes two Gemini calls, one for the UK title and one for the question. Further questions only require running the last cell.
+1. Click **Open in Colab** above. Leave `RUN_LIVE = False` in section 1 and choose **Runtime → Run all**.
+2. The first code cell uses the `requests` package to download `project_counts.json` from this public repository. It contains original country counts and totals from the completed Gemini run. No file upload or personal key is needed for this mode. [Notebook input](project_counts.json) · [Completed Gemini totals](completed_results.csv)
+3. To chat, change the quoted `question` in the **last code cell** and press **Shift + Enter**. Try “How often did Gemini agree?”, “What sectors were hidden?” or “Where should we run the pilot?”
+4. For **live Gemini**, give the notebook access to `GOOGLE_API_KEY` in Colab **Secrets**, set `RUN_LIVE = True` and run all again. Gemini classifies the UK example and answers the chat question using the calculated results. For each new question, rerun only the last cell. The eight-country analysis uses the completed run in both modes.
+
+**Optional Streamlit app.** Open **Ask the data** and enter “Which country has the most missing categories?” The live app starts each session with the original postings. Classifying batches updates that session’s results. [Open the Streamlit chatbot](https://global-job-category-imputation-labor-market-intelligence-gcul5.streamlit.app/)
 
 ## Example output
 
-These selected lines come from running the notebook with its default settings.
+Selected lines from a default **Run all**, in the order the notebook prints them.
 
 ```text
 Postings in the sample: 4000
@@ -47,21 +47,17 @@ Missing categories filled: 1876/1879.
 2                        engineering    204
 UK title check: Teaching Assistant → teaching & education
 
+Pilot category repair in Germany and test a campaign for engineering after label review.
 Germany
                  sector  before  after  gain
 0           engineering       6     81    75
 UK one-title scenario: teaching & education 103 → 104.
-Pilot category repair in Germany and test a campaign for engineering after label review.
 ```
 
-**How to read these numbers.** Of 2,121 originally known tags, 28 fell outside the 16-sector mapping and two received uncertain AI labels. That leaves 2,091 pairs for the agreement calculation. Three of the 1,879 missing tags remained uncertain. Existing tags provide a comparison point. An independent human review would be needed to measure accuracy. Sector gains count repaired tags in these same postings.
+Of 2,121 postings with an existing tag, 28 fell outside the sector mapping and two had uncertain AI labels. That leaves 2,091 comparisons. Agreement measures consistency with the original tags. Sector gains count existing postings whose tags were repaired. The UK teaching count goes from 103 to 104 in the one-title example and reaches 105 in the full run.
 
 ## AI Use Disclosure
 
-I used ChatGPT/Codex to generate the Python code and help write this README. I asked it to simplify the cells, shorten the time needed to run the project, debug the notebook and check the results against the course rubric. I requested revisions to use the course cheat sheets and keep the chatbot question. AI generated the code, including the revisions. My own contribution was directing those changes and reviewing the code line by line to make sure I understood what it does. Gemini was the project’s outside tool for assigning sectors to job titles and answering live questions.
-
-## Optional Streamlit app
-
-Open the [live Streamlit app](https://global-job-category-imputation-labor-market-intelligence-gcul5.streamlit.app/). In **Ask the data**, type “Which country has the most missing categories?” and press **Enter**. The app answers questions about missing tags, agreement, hidden sectors, changes and the pilot directly from the selected data. Each new session starts with all titles pending. Live classification and open-ended chat use the app’s own Gemini secret. The Colab notebook above opens with the completed project results.
+I used ChatGPT/Codex to generate the Python code and help write this README. I asked it to shorten the cells, use the course cheat sheets, speed up the default run and keep the chatbot working. I directed those revisions and reviewed every line to make sure I understood what it does. AI wrote the Python implementation and its revisions. Gemini assigned sectors to job titles and answers questions in live mode.
 
 Levi Michael Press · University of Georgia
