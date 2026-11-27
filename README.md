@@ -58,6 +58,6 @@ Of 2,121 postings with an existing tag, 28 fell outside the sector mapping and t
 
 ## AI Use Disclosure
 
-I used ChatGPT/Codex to generate the Python code and help write this README. I asked it to shorten the cells, use the course cheat sheets, speed up the default run and keep the chatbot working. I directed those revisions and reviewed every line to make sure I understood what it does. AI wrote the Python implementation and its revisions. Gemini assigned sectors to job titles and answers questions in live mode.
+I used ChatGPT/Codex to generate the Python code and help write this README. I asked it to simplify the coding as much as possible, use the course cheat sheets, and speed up the default run and keep the chatbot working. I directed those revisions and reviewed every line to make sure I understood what it does. AI wrote the Python implementation and its revisions. Gemini assigned sectors to job titles and answers questions in live mode. It took many hours to make sure ChatGPT created the Python to my liking and making sure it only used formulas I understood.
 
 Levi Michael Press · University of Georgia
